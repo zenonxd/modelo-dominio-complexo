@@ -1,5 +1,6 @@
 package com.devsuperior.educandoweb.dslearn.entities;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 
@@ -11,6 +12,8 @@ public class Notification {
 
     private Long id;
     private String text;
+
+    @Column(columnDefinition = "TIMESTAMP WITHOUT TIME ZONE")
     private Instant moment;
     private Boolean read;
     private String route;

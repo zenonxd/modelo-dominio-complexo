@@ -90,6 +90,13 @@ INSERT INTO tb_section (title, description, position, img_Uri, resource_id, prer
 INSERT INTO tb_section (title, description, position, img_Uri, resource_id, prerequisite_id) VALUES ('Capítulo 3', 'Neste capítulo vamos finalizar', 3, 'https://www.nibs.in/wp-content/uploads/2020/12/ss1.jpg', 1, 2);
 ```
 
+### Seed Enrollment (Matrícula)
+
+```sql
+INSERT INTO tb_enrollment (user_id, offer_id, enrollMoment, refund_Moment, available, only_Update) VALUES (1, 1, TIMESTAMP WITH TIME ZONE '2024-11-24T10:50:07.12345Z', null, true, false);
+INSERT INTO tb_enrollment (user_id, offer_id, enrollMoment, refund_Moment, available, only_Update) VALUES (2, 1, TIMESTAMP WITH TIME ZONE '2024-11-24T10:50:07.12345Z', null, true, false);
+```
+
 ### ManyToOne mapeados
 
 ![alt text](image-5.png)
@@ -105,3 +112,47 @@ INSERT INTO tb_section (title, description, position, img_Uri, resource_id, prer
 ![alt text](image-8.png)
 
 Diferente das outras, essa entidade possui um pré-requisito. Como é possível verificar no UML, uma sessão tem uma auto associação. Ou seja, ela pode ter outra sessão no papel de pré-requisito.
+
+## Enrollment
+
+![alt text](image-11.png)
+
+Essa classe será responsável por "linkar" as duas tabelas: User e Offer, fazendo uma relação ManyToMany entre elas, gerando uma chave composta (user_id e offer_id).
+
+❗Chave composta não tem no JPA, então... o que fazer?
+
+Teremos que criar uma classe auxiliar para ser a chave. Ela terá o id do usuário e da oferta. Além disso, essa classe auxiliar será o ID da classe Enrollment. Vamos ver isso abaixo bem detalhado:
+
+Criaremos a entidade Enrollment normalmente seguindo todo o diagrama. Entretanto, seu ID será uma classe criada customizada (conforme falamos acima).
+
+Veja a classe:
+
+![alt text](image-13.png)
+
+Gerar Getters and Setters, entretando o get e set do Id, ficará diferente.
+
+Faremos de forma customizada, settando o User (student) e a Offer:
+
+![alt text](image-14.png)
+
+### EnrollmentPK
+
+Criaremos um subpacote em entidades chamado PK, com a classe EnrollmentPK. Ela terá duas referências: para o usuário e offer.
+
+Lembrar de implementar Getter and Setter. O equals&hashCode será comparado as DUAS classes para verificar a matrícula.
+
+![alt text](image-12.png)
+
+### Mapeamento
+
+Com as duas classes prontas, iremos mapeá-las. Como mapear o EnrollmentPK (quer irá gerar a tabela de associação)?
+
+![alt text](image-15.png)
+
+Passaremos o @Embeddable na classe PK. Afinal, ela definirá atributos de outra classe.
+
+Quando temos uma classe que subdivide atributos de outra classe, precisamos passar essa anotação.
+
+![alt text](image-16.png)
+
+Na classe Enrollment, passaremos o @EmbeddedId
