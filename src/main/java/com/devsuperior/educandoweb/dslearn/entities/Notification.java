@@ -1,8 +1,6 @@
 package com.devsuperior.educandoweb.dslearn.entities;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 
 import java.time.Instant;
 
@@ -10,6 +8,8 @@ import java.time.Instant;
 @Table(name = "tb_notification")
 public class Notification {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String text;
 
@@ -17,6 +17,12 @@ public class Notification {
     private Instant moment;
     private Boolean read;
     private String route;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
+
+    public Notification() {}
 
     public Notification(Long id, String text, Instant moment, Boolean read, String route) {
         this.id = id;
@@ -64,5 +70,9 @@ public class Notification {
 
     public void setRoute(String route) {
         this.route = route;
+    }
+
+    public User getUser() {
+        return user;
     }
 }

@@ -2,6 +2,8 @@ package com.devsuperior.educandoweb.dslearn.entities;
 
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 @Entity
@@ -22,18 +24,21 @@ public class Section {
 
     @ManyToOne
     @JoinColumn(name = "prerequisite_id")
-    private Section prerequisite;
+    private Section preRequisite;
+
+    @OneToMany(mappedBy = "section")
+    private List<Lesson> lessons = new ArrayList<>();
 
     public Section() {}
 
-    public Section(Long id, String title, String description, Integer position, String imgUri, Resource resource, Section prerequisite) {
+    public Section(Long id, String title, String description, Integer position, String imgUri, Resource resource, Section preRequisite) {
         this.id = id;
         this.title = title;
         this.description = description;
         this.position = position;
         this.imgUri = imgUri;
         this.resource = resource;
-        this.prerequisite = prerequisite;
+        this.preRequisite = preRequisite;
     }
 
     public Long getId() {
@@ -84,12 +89,12 @@ public class Section {
         this.resource = resource;
     }
 
-    public Section getPrerequisite() {
-        return prerequisite;
+    public Section getpreRequisite() {
+        return preRequisite;
     }
 
-    public void setPrerequisite(Section prerequisite) {
-        this.prerequisite = prerequisite;
+    public void setpreRequisite(Section preRequisite) {
+        this.preRequisite = preRequisite;
     }
 
     @Override

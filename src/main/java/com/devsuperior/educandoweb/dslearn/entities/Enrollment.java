@@ -1,12 +1,10 @@
 package com.devsuperior.educandoweb.dslearn.entities;
 
 import com.devsuperior.educandoweb.dslearn.entities.pk.EnrollmentPK;
-import jakarta.persistence.Column;
-import jakarta.persistence.EmbeddedId;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 
 import java.time.Instant;
+import java.util.*;
 
 @Entity
 @Table(name = "tb_enrollment")
@@ -22,11 +20,18 @@ public class Enrollment {
 
     @Column(columnDefinition = "TIMESTAMP WITHOUT TIME ZONE")
     private Instant refundMoment;
+
     public boolean available;
 
     //essa matriz é regular? o aluno terá suporte?
     //ou será só de atualização?
     public boolean onlyUpdate;
+
+    @ManyToMany(mappedBy = "enrollmentsDone")
+    private Set<Lesson> lessonsDone = new HashSet<Lesson>();
+
+    @OneToMany(mappedBy = "enrollment")
+    private List<Deliver> deliveries = new ArrayList<>();
 
     public Enrollment() {}
 
@@ -87,5 +92,29 @@ public class Enrollment {
 
     public void setOnlyUpdate(boolean onlyUpdate) {
         this.onlyUpdate = onlyUpdate;
+    }
+
+    public EnrollmentPK getId() {
+        return id;
+    }
+
+    public Set<Lesson> getLessonsDone() {
+        return lessonsDone;
+    }
+
+    public List<Deliver> getDeliveries() {
+        return deliveries;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Enrollment that)) return false;
+        return Objects.equals(getId(), that.getId());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(getId());
     }
 }

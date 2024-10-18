@@ -3,9 +3,7 @@ package com.devsuperior.educandoweb.dslearn.entities;
 import jakarta.persistence.*;
 
 import java.time.Instant;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 @Entity
 @Table(name = "tb_offer")
@@ -28,6 +26,9 @@ public class Offer {
 
     @OneToMany(mappedBy = "offer")
     private List<Resource> resources = new ArrayList<>();
+
+    @OneToMany(mappedBy = "offer")
+    private List<Topic> topics = new ArrayList<>();
 
     public Offer() {}
 
@@ -81,6 +82,10 @@ public class Offer {
 
     public List<Resource> getResources() {
         return resources;
+    }
+
+    public List<Topic> getTopics() {
+        return topics;
     }
 
     @Override
